@@ -1,5 +1,5 @@
 from colorama import init, Fore
-
+from reportes import ( generar_nomina_viaje, obtener_pasajes_viaje, calcular_recaudacion_viaje, consultar_ocupacion_tramo)
 # Aquí van las importaciones de los otros módulos del proyecto
 # from reportes import generar_nomina_viaje
 # import clientes, buses, viajes, ventas, archivos
@@ -23,7 +23,7 @@ def aviso(msg: str) -> None:
     print(f"{Fore.YELLOW}Advertencia: {msg}")
 
 
-def mostrar_tabla_nomina(nomina: list[dict[str, str | int]]) -> None:
+def mostrar_tabla_nomina(nomina: list[dict]) -> None:
     if len(nomina) == 0:
         aviso("Este viaje aún no tiene pasajeros vigentes.")
         return
@@ -45,6 +45,16 @@ def mostrar_tabla_nomina(nomina: list[dict[str, str | int]]) -> None:
             f"{fila['ciudad_destino']:<12}"
         )
 
+def mostrar_pasajes_viaje(lista_pasajes: list[dict]) -> None:
+    if len(lista_pasajes) ==0:
+        aviso("No hay pasajes registrados para este viaje.")
+        return
+    print(
+        f"\n{Fore.CYAN}"
+        f"{'ID':<8} | {'Asiento':<8} | {'Pasajero':<22} | "
+        f"{'Origen':<12} | {'Destino':<12} | {'Valor':<10} | {'Estado':<10}"
+    )
+    print(f"{Fore.CYAN}{'-' * 94}")
 
 def menu_clientes() -> None:
     while True:
@@ -138,19 +148,61 @@ def menu_reportes() -> None:
                 if criterio not in ("a", "b", "c"):
                     raise ValueError("tienes que elegir a, b o c.")
                 
+                pasajes: list[dict] = []
+                clientes: list[dict] = []
+                ciudades: list[dict] = []
                 
-                pass
+                nomina = generar_nomina_viaje(id_viaje, pasajes, clientes, ciudades, criterio)
+                mostrar_tabla_nomina(nomina)
+                
+                
             except ValueError as err:
                 error(str(err))
             except Exception as err:
                 error(f"no se pudo generar la nómina ({err})")
 
         elif op == "2":
-            pass
+            id_viaje= input("ID del viaje: ").strip()
+            try:
+                    pasajes: list[dict] = []
+                    clientes: list[dict] = []
+                    ciudades: list[dict] = []
+                    
+                    lista = obtener_pasajes_viaje(id_viaje, pasajes, clientes, ciudades)
+                    mostrar_pasajes_viaje
+            except Exception as err:
+                    error(f"no se pudieron obtener los pasajes ({err})")
+          
         elif op == "3":
-            pass
+            id_viaje = input("ID del viaje: ").strip()
+            try:
+                pasajes: list[dict] = []  
+
+                total = calcular_recaudacion_viaje(id_viaje, pasajes)
+                ok(f"Recaudación vigente del viaje {id_viaje}: ${total} CLP")
+            except Exception as err:
+                error(f"no se pudo calcular la recaudación ({err})")
         elif op == "4":
-            pass
+            id_viaje: str = input("ID del viaje: ").strip()
+            id_origen: str = input("ID ciudad de origen del tramo: ").strip()
+            id_destino: str = input("ID ciudad de destino del tramo: ").strip()
+
+            try:
+                viajes: list[dict] = []    
+                buses: list[dict] = []     
+                ciudades: list[dict] = []  
+                pasajes: list[dict] = []   
+
+                info = consultar_ocupacion_tramo(
+                    id_viaje, id_origen, id_destino, viajes, buses, ciudades, pasajes
+                )
+                titulo(f"OCUPACIÓN DEL TRAMO (CAPACIDAD: {info['capacidad']})")
+                print(f"{Fore.RED}Ocupados ({len(info['ocupados'])}): {info['ocupados']}")
+                print(f"{Fore.GREEN}Libres ({len(info['libres'])}): {info['libres']}")
+            except ValueError as err:
+                error(str(err))
+            except Exception as err:
+                error(f"no se pudo consultar la ocupación ({err})")
         elif op == "0":
             break
         else:
