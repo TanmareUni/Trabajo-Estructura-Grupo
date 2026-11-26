@@ -1,0 +1,50 @@
+[
+    {
+        "id_cliente": 1,
+        "rut": "18452316-7",
+        "nombres": "María José",
+        "apellido_paterno": "González",
+        "apellido_materno": "Soto",
+        "contacto": "+56 9 8123 4501"
+    },
+    {
+        "id_cliente": 2,
+        "rut": "17963248-9",
+        "nombres": "Carlos Andrés",
+        "apellido_paterno": "Muñoz",
+        "apellido_materno": "Rojas",
+        "contacto": "carlos.munoz@correo.cl"
+    },
+    {
+        "id_cliente": 3,
+        "rut": "19874521-9",
+        "nombres": "Camila Fernanda",
+        "apellido_paterno": "Pérez",
+        "apellido_materno": "Vera",
+        "contacto": "+56 9 7456 1230"
+    },
+    {
+        "id_cliente": 4,
+        "rut": "16547893-2",
+        "nombres": "Felipe Ignacio",
+        "apellido_paterno": "Contreras",
+        "apellido_materno": "Díaz",
+        "contacto": "felipe.contreras@correo.cl"
+    },
+    {
+        "id_cliente": 5,
+        "rut": "20135674-1",
+        "nombres": "Valentina Paz",
+        "apellido_paterno": "Araya",
+        "apellido_materno": "Núñez",
+        "contacto": "+56 9 6987 2214"
+    },
+    {
+        "id_cliente": 6,
+        "rut": "15321987-7",
+        "nombres": "Javier Alejandro",
+        "apellido_paterno": "Fuentes",
+        "apellido_materno": "Silva",
+        "contacto": "+56 9 5412 7788"
+    }
+]

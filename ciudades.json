@@ -1,0 +1,32 @@
+[
+    {
+        "id_ciudad": 1,
+        "nombre": "Concepción",
+        "posicion": 0
+    },
+    {
+        "id_ciudad": 2,
+        "nombre": "Chillán",
+        "posicion": 1
+    },
+    {
+        "id_ciudad": 3,
+        "nombre": "Linares",
+        "posicion": 2
+    },
+    {
+        "id_ciudad": 4,
+        "nombre": "Talca",
+        "posicion": 3
+    },
+    {
+        "id_ciudad": 5,
+        "nombre": "Rancagua",
+        "posicion": 4
+    },
+    {
+        "id_ciudad": 6,
+        "nombre": "Santiago",
+        "posicion": 5
+    }
+]
