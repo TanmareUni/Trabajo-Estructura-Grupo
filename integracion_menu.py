@@ -1,9 +1,3 @@
-"""
-Funciones para pegar en el archivo del menú (usan titulo, ok, error y aviso de ese mismo archivo).
-Conectan los "pass" de menu_flota_viajes (opciones 4 y 5), menu_pasajes (1 y 2) y menu_reportes (2, 3 y 4).
-
-"""
-
 from asientos import ocupacion_por_tramo, obtener_tramo
 from buses import cargar_buses
 from ciudades import cargar_ciudades
