@@ -2,6 +2,7 @@
 from datetime import datetime
 
 from archivos import leer_archivo, guardar_archivo, siguiente_id
+from buses import buscar_bus
 from ciudades import obtener_posicion
 from tarifas import SEGMENTOS_TOTALES
 
@@ -49,15 +50,6 @@ def buscar_viaje(viajes: list[dict], id_viaje: int) -> dict:
 
 
 
-def buscar_bus_por_id(buses: list[dict], id_bus: int) -> dict:
-
-    for bus in buses:
-        if bus["id_bus"] == id_bus:
-            return bus
-    raise ValueError("No existe un bus con ese ID")
-
-
-
 def bus_disponible(bus: dict) -> bool:
 
     estado = bus["estado"]
@@ -84,7 +76,7 @@ def programar_viaje(viajes: list[dict], buses: list[dict], ciudades: list[dict],
                     fecha: str, hora: str, id_origen: int, id_destino: int,
                     tarifa_base: int = TARIFA_BASE_DEFECTO) -> dict:
 
-    bus = buscar_bus_por_id(buses, id_bus)
+    bus = buscar_bus(buses, id_bus)
     if not bus_disponible(bus):
         raise ValueError("El bus no está disponible")
 
@@ -127,5 +119,5 @@ def obtener_sentido(ciudades: list[dict], viaje: dict) -> int:
 def obtener_capacidad_viaje(viajes: list[dict], buses: list[dict], id_viaje: int) -> int:
 
     viaje = buscar_viaje(viajes, id_viaje)
-    bus = buscar_bus_por_id(buses, viaje["id_bus"])
+    bus = buscar_bus(buses, viaje["id_bus"])
     return bus["capacidad"]
