@@ -1,4 +1,5 @@
 # Trabajo-Estructura-Grupo
+## NOTA: Para ejecutar programa, ejecutar menu.py con "python menu.py"
 ## Parte A: archivos, ciudades, clientes y buses
 
 ### Modulos
