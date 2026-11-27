@@ -1,87 +1,91 @@
 # Trabajo-Estructura-Grupo
 
-# Funcionalidades implementadas
+## Alcance
 
-## Gestión de viajes
+| RF | Qué cubre esta parte |
+|---|---|
+| RF04 | Programar y consultar viajes |
+| RF05 | Venta de pasajes y cálculo automático de tarifas |
+| RF06 | Reutilización de asientos por tramo |
+| RF07 | Anulación de pasajes |
+| RF09 | Pasajes vigentes y anulados de un viaje, recaudación vigente y ocupación de asientos por tramo |
 
-- Cargar y guardar viajes desde viajes.json.
-- Generar un identificador automático para cada viaje.
-- Programar viajes en el sentido Concepción-Santiago o Santiago-Concepción.
-- Validar la fecha con formato AAAA-MM-DD.
-- Validar la hora con formato HH:MM.
-- Comprobar que el bus seleccionado esté disponible.
-- Comprobar que el bus no tenga otro viaje programado en la misma fecha y hora.
-- Validar que la tarifa base sea mayor que cero.
-- Usar una tarifa base predeterminada de 10.000.
-- Buscar viajes por identificador.
-- Obtener la capacidad del bus asociado a un viaje.
-- Determinar el sentido del viaje.
+## Instalación
 
-## Venta de pasajes
+Requiere Python 3.10 o superior.
 
-- Cargar y guardar pasajes desde pasajes.json.
-- Verificar la existencia del cliente.
-- Verificar la existencia del viaje.
-- Impedir que el origen y el destino sean iguales.
-- Impedir tramos que no respeten el sentido del viaje.
-- Validar que el asiento sea entero y esté dentro de la capacidad del bus.
-- Impedir que se repita un asiento ocupado en un tramo superpuesto.
-- Registrar automáticamente el identificador, viaje, cliente, origen, destino, asiento, valor y estado del pasaje.
-- Los pasajes se registran inicialmente con estado vigente.
+```bash
+pip install -r requirements.txt   # instala colorama
+```
 
-## Anulación y consulta
+## Ejecución
 
-- Buscar pasajes por identificador.
-- Anular un pasaje vigente.
-- Impedir anular dos veces el mismo pasaje.
-- Mantener el pasaje anulado dentro del registro.
-- Consultar todos los pasajes de un viaje.
-- Filtrar pasajes por estado.
-- Calcular la recaudación vigente sumando únicamente los pasajes vigentes.
-- Liberar un asiento en el tramo correspondiente al pasaje anulado.
+Las funciones de esta parte se usan desde el menú principal del sistema, donde `integracion_menu.py` las conecta con las opciones de viajes y pasajes.
 
-## Administración de asientos
+## Organización
 
-- Representar cada asiento como un tramo definido por las posiciones de origen
-  y destino.
-- Detectar cuando dos tramos se superponen.
-- Permitir reutilizar un asiento en tramos consecutivos o no superpuestos.
-- Identificar los asientos ocupados y libres de un tramo determinado.
-- Considerar solamente pasajes vigentes al calcular la ocupación.
+| Archivo | Responsabilidad |
+|---|---|
+| `tarifas.py` | Precio de un pasaje según los segmentos recorridos |
+| `asientos.py` | Superposición de tramos, validación de asientos y ocupación por tramo |
+| `viajes.py` | Programar viajes; validación de bus, fecha, hora y extremos del recorrido |
+| `pasajes.py` | Venta, anulación, listado por viaje y recaudación vigente |
+| `consola.py` | Mensajes con colores (colorama): títulos, confirmaciones, errores y advertencias |
+| `integracion_menu.py` | Funciones del menú que conectan estos módulos con la consola |
 
-## Cálculo de tarifas
+### Archivos de datos
 
-- Trabajar con cinco segmentos totales.
-- Aplicar un descuento del 10 % por segmento no utilizado.
-- Calcular la cantidad de segmentos recorridos entre origen y destino.
-- Rechazar tarifas base menores o iguales a cero.
-- Rechazar tramos con origen y destino iguales.
-- Rechazar tramos fuera del recorrido.
-- Redondear el valor calculado a pesos enteros.
+| Archivo | Campos |
+|---|---|
+| `viajes.json` | `id_viaje`, `id_bus`, `fecha`, `hora`, `id_origen`, `id_destino`, `tarifa_base` |
+| `pasajes.json` | `id_pasaje`, `id_viaje`, `id_cliente`, `id_origen`, `id_destino`, `asiento`, `valor`, `estado` |
 
-La fórmula utilizada es:
+Las relaciones se hacen solo por ID (`id_bus`, `id_cliente`, `id_viaje`, `id_origen`, `id_destino`), sin duplicar datos de otras entidades.
 
-porcentaje = 100 - segmentos_no_usados × 10
+## Reglas implementadas
 
-valor = (tarifa_base × porcentaje + 50) / 100
+- **Tarifa:** `tarifa_base` menos 10% por cada uno de los 5 segmentos del recorrido que no se usan (descuento acumulativo, no compuesto). No depende del sentido. Con base $10.000: Concepción–Santiago $10.000, Chillán–Santiago $9.000, Concepción–Talca $8.000, Chillán–Talca $7.000, Santiago–Rancagua y Talca–Linares $6.000.
+- **Viajes:** solo Concepción–Santiago o Santiago–Concepción, con bus existente y disponible. Un bus no puede tener dos viajes en la misma fecha y hora.
+- **Venta:** el cliente y el viaje deben existir, el tramo debe respetar el sentido del viaje, el origen debe ser distinto del destino y el asiento debe estar dentro de la capacidad del bus.
+- **Reutilización de asientos:** un asiento puede venderse varias veces en un viaje si los tramos no se superponen. El descenso en una ciudad libera el asiento para un embarque en esa misma ciudad.
+- **Anulación:** el pasaje cambia de estado `vigente` a `anulado` y no se borra. Libera el asiento solo en su tramo. No se puede anular dos veces. Los pasajes anulados no cuentan en la ocupación ni en la recaudación.
 
-## Integración con el menú
+## Estructuras y algoritmos
 
-El módulo integracion_menu.py ofrece las siguientes acciones:
+### Búsqueda secuencial
 
-- Programar un viaje ingresando bus, fecha, hora, ciudades y tarifa base.
-- Mostrar los viajes registrados con bus, fecha, hora, origen, destino y tarifa.
-- Comprar un pasaje ingresando cliente, viaje, origen, destino y asiento.
-- Anular un pasaje por identificador.
-- Consultar los pasajes asociados a un viaje.
-- Mostrar el recaudado vigente de un viaje.
-- Consultar los asientos ocupados y libres de un tramo.
-- Mostrar las ciudades disponibles para seleccionar origen y destino.
-- Leer números enteros con validación.
-- Mostrar mensajes de éxito, advertencia o error.
+`buscar_viaje`, `buscar_pasaje` y `asiento_libre_en_tramo` recorren las listas de registros cargadas desde los archivos JSON.
 
-## Estados
+- **Justificación:** las listas son pequeñas y no necesitan mantenerse ordenadas por ID. `asiento_libre_en_tramo` debe revisar todos los pasajes vigentes del viaje para comparar tramos, por lo que una búsqueda binaria no es aplicable.
+- **Valor funcional:** valida que un viaje exista, permite anular un pasaje por su ID y decide si un asiento está libre en un tramo.
 
-- vigente: el pasaje participa en la ocupación y en la recaudación.
-- anulado: el pasaje permanece registrado, libera su asiento en el tramo
-  correspondiente y no suma a la recaudación.
+### Algoritmo de superposición de tramos
+
+Decisión de diseño de `asientos.py`: cada pasaje se representa como un intervalo `(inicio, fin)` con las posiciones de las ciudades. Dos tramos se superponen cuando `inicio_a < fin_b` y `inicio_b < fin_a`.
+
+- Chillán–Talca `(1, 3)` y Linares–Rancagua `(2, 4)` se superponen, así que el asiento se rechaza.
+- Concepción–Chillán `(0, 1)` y Chillán–Talca `(1, 3)` no se superponen, así que el asiento se reutiliza.
+- El tramo se ordena con `min` y `max`, por lo que funciona igual en ambos sentidos del viaje.
+
+## Casos de aceptación cubiertos
+
+Esta parte cumple, entre otros, los siguientes casos de aceptación del enunciado:
+
+- Tarifas: Concepción–Santiago 100%, Chillán–Santiago 90%, Santiago–Rancagua 60%.
+- Origen igual al destino: venta rechazada.
+- Asiento fuera de capacidad: operación rechazada.
+- Asiento ocupado en tramo superpuesto: venta rechazada.
+- Asiento reutilizado en tramo consecutivo: venta permitida.
+- Anulación de un pasaje vigente: el asiento queda libre solo en ese tramo.
+- Anulación repetida: operación rechazada.
+- Recaudación luego de anular: excluye el pasaje anulado.
+- Guardar y volver a cargar los pasajes conserva los datos y sus estados.
+
+## Dependencias de otras partes
+
+| Módulo | Qué usa esta parte |
+|---|---|
+| `archivos.py` | `leer_archivo`, `guardar_archivo`, `siguiente_id` |
+| `ciudades.py` | `obtener_posicion` |
+| `clientes.py` | `buscar_cliente` |
+| `buses.py` | `buscar_bus`, `cargar_buses` |
