@@ -1,0 +1,11 @@
+[
+    {
+        "id_viaje": 1,
+        "id_bus": 1,
+        "fecha": "2026-12-21",
+        "hora": "14:25",
+        "id_origen": 1,
+        "id_destino": 6,
+        "tarifa_base": 10000
+    }
+]

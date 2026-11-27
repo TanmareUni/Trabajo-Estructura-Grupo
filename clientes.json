@@ -46,5 +46,13 @@
         "apellido_paterno": "Fuentes",
         "apellido_materno": "Silva",
         "contacto": "+56 9 5412 7788"
+    },
+    {
+        "id_cliente": 7,
+        "rut": "21269639-0",
+        "nombres": "Antonio Andres",
+        "apellido_paterno": "Constanzo",
+        "apellido_materno": "Vicens",
+        "contacto": "aconstanzo@usm.cl"
     }
 ]
