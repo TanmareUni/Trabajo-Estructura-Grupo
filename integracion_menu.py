@@ -1,5 +1,6 @@
 from asientos import ocupacion_por_tramo, obtener_tramo
 from buses import cargar_buses
+from consola import ok, error, aviso
 from ciudades import cargar_ciudades
 from clientes import cargar_clientes
 from pasajes import (cargar_pasajes, guardar_pasajes, registrar_pasaje, anular_pasaje,
