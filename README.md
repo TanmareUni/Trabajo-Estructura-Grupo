@@ -1,4 +1,4 @@
-# Trabajo-Estructura-Grupo
+# Trabajo-Estructura-Grupo (Valentina Vivanco, Antonio Constanzo, Franco Valenzuela)
 ## NOTA: Para ejecutar programa, ejecutar menu.py con "python menu.py"
 ## Parte A: archivos, ciudades, clientes y buses
 
