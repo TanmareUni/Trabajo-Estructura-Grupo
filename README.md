@@ -101,30 +101,30 @@ Igual que en la Parte A, las funciones no imprimen: lanzan ValueError cuando un 
 13. Consultar la recaudacion del viaje despues de anular: no incluye el pasaje anulado.
 14. Reiniciar la aplicacion: los viajes, los pasajes y sus estados se conservan.
 
-### Viaje Programado
+## Viaje Programado
 ![alt text](ViajeProgramado.png)
 
-### Viaje Rechazado
+## Viaje Rechazado
 ![alt text](ViajeRechazado.png)
 
-### Tarifas
+## Tarifas
 ![alt text](Tarifas1.png)
 ![alt text](Tarifas2.png)
 
-### Asiento Reutilizado
+## Asiento Reutilizado
 ![alt text](AsientoReutilizado.png)
 
-### Asiento Superpuesto
+## Asiento Superpuesto
 ![alt text](AsientoSuperpuesto.png)
 
-### Capacidad e Invalidos
+## Capacidad e Invalidos
 ![alt text](CapInv1.png)
 ![alt text](CapInv2.png)
 
-### Pasajes del Viaje
+## Pasajes del Viaje
 ![alt text](PasajesDelViaje.png)
 
-### Anulación
+## Anulación
 ![alt text](AnulacionPasaje.png)
 
 
