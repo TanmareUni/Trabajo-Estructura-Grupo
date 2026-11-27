@@ -167,7 +167,7 @@ Igual que en la Parte A, las funciones no imprimen: lanzan ValueError cuando un 
 ### Instalacion y ejecucion
 1. Instalar dependencias:
    ```bash
-   pip install -r requirements.txt
+   pip install -r requirements.txt```
 
 
    ## dejenos pasar profe porfavor
