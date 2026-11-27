@@ -100,3 +100,25 @@ Igual que en la Parte A, las funciones no imprimen: lanzan ValueError cuando un 
 12. Anular el mismo pasaje otra vez: se rechaza.
 13. Consultar la recaudacion del viaje despues de anular: no incluye el pasaje anulado.
 14. Reiniciar la aplicacion: los viajes, los pasajes y sus estados se conservan.
+
+## Parte C: nominas, reportes y menu principal
+
+### Modulos
+- reportes.py: genera la nomina de pasajeros de un viaje cruzando los pasajes vigentes con clientes y ciudades, implementa el ordenamiento propio mediante Bubble Sort y calcula los reportes de pasajes del viaje, recaudacion vigente y ocupacion de asientos por tramo.
+- main.py (o menu_actualizado.py): punto de entrada de la aplicacion de consola. Contiene el bucle principal, los submenus de cada modulo, el manejo de excepciones y la interfaz visual con Colorama (cian para titulos, verde para confirmaciones, rojo para errores y amarillo para advertencias).
+- requirements.txt: archivo de dependencias del proyecto con la libreria colorama.
+
+### Reglas de negocio
+- Nomina de pasajeros: muestra unicamente los pasajes con estado vigente de un viaje seleccionado, indicando asiento, apellido paterno, apellido materno, nombres, ciudad de embarque y destino final.
+- Criterios de ordenamiento: permite ordenar la nomina de forma ascendente por (a) apellido paterno (desempate por apellido materno y nombres), (b) nombres (desempate por apellido paterno y materno) o (c) numero de asiento (desempate por posicion de la ciudad de embarque).
+- Inmutabilidad en disco: el ordenamiento de la nomina se realiza sobre una copia en memoria para su visualizacion, sin modificar el orden original guardado en pasajes.json.
+- Reportes de gestion: permite listar el historial completo de pasajes de un viaje diferenciando vigentes y anulados, calcular la recaudacion total excluyendo anulados y revisar que asientos estan ocupados o libres en un tramo especifico.
+
+### Estructuras y algoritmos
+- Ordenamiento propio (Bubble Sort en reportes.py): para cumplir con la restriccion de no utilizar sort() ni sorted() en la nomina, se implemento el algoritmo Bubble Sort optimizado con corte temprano (bandera de intercambio) sobre una copia de la lista de pasajeros del viaje. Como la capacidad maxima de un bus interurbano es acotada (entre 40 y 60 pasajeros), su complejidad $O(N^2)$ en el peor caso y $O(N)$ cuando ya esta ordenado resulta adecuada, ademas de ser un algoritmo estable que respeta los criterios de desempate sin alterar el archivo persistido.
+- Indexacion en memoria con diccionarios: antes de cruzar los pasajes con clientes y ciudades para armar la nomina y los reportes, se construyen diccionarios indexados por id_cliente e id_ciudad. Esto permite resolver cada cruce en tiempo promedio $O(1)$ en lugar de recorrer las listas completas por cada pasaje.
+
+### Instalacion y ejecucion
+1. Instalar dependencias:
+   ```bash
+   pip install -r requirements.txt
