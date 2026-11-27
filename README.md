@@ -53,3 +53,50 @@ Las funciones no imprimen: lanzan ValueError cuando un dato no es valido y el me
 ## Reinicio
 ![alt text](image-8.png)
 ![alt text](image-9.png) El Bus nuevo sigue en la lista 
+
+## Parte B: viajes, tarifas, asientos y pasajes
+
+### Modulos
+- tarifas.py: calcula el precio de un pasaje segun los segmentos que recorre (calcular_tarifa). Descuenta 10% de la tarifa base por cada uno de los 5 segmentos que no se usan, sin tabla de combinaciones.
+- asientos.py: representa cada pasaje como un tramo y revisa si dos tramos se superponen (tramos_se_superponen, asiento_libre_en_tramo). Tambien entrega los asientos ocupados y libres de un tramo.
+- viajes.py: programar y buscar viajes. Valida bus existente y disponible, fecha, hora, que el viaje sea Concepcion-Santiago o Santiago-Concepcion y que un bus no tenga dos viajes a la misma fecha y hora.
+- pasajes.py: venta, anulacion, listado de pasajes de un viaje (vigentes y anulados) y recaudacion vigente.
+- consola.py: mensajes con colores (colorama) para titulos, confirmaciones, errores y advertencias.
+- integracion_menu.py: funciones que conectan estos modulos con las opciones del menu.
+
+### Archivos de datos
+| Archivo | Campos |
+|---|---|
+| viajes.json | id_viaje, id_bus, fecha, hora, id_origen, id_destino, tarifa_base |
+| pasajes.json | id_pasaje, id_viaje, id_cliente, id_origen, id_destino, asiento, valor, estado |
+
+Los viajes usan id_bus, id_origen e id_destino (IDs de ciudades), y los pasajes usan id_viaje e id_cliente. No hay duplicacion de datos entre archivos.
+
+### Reglas de negocio
+- Tarifa: con base $10.000, Concepcion-Santiago cuesta $10.000, Chillan-Santiago $9.000, Concepcion-Talca $8.000, Chillan-Talca $7.000 y Santiago-Rancagua o Talca-Linares $6.000. No depende del sentido.
+- Venta: el cliente y el viaje deben existir, el origen debe ser distinto del destino, el tramo debe respetar el sentido del viaje y el asiento debe estar dentro de la capacidad del bus.
+- Reutilizacion de asientos: un asiento se puede vender varias veces en un viaje si los tramos no se superponen. El descenso en una ciudad libera el asiento para un embarque en esa misma ciudad.
+- Anulacion: el pasaje no se borra, cambia su estado de vigente a anulado. Libera el asiento solo en su tramo, no se puede anular dos veces y no cuenta en la ocupacion ni en la recaudacion.
+
+### Estructuras y algoritmos
+- Busqueda secuencial: buscar_viaje, buscar_pasaje y asiento_libre_en_tramo recorren las listas cargadas desde los JSON. Las listas son pequenas y no necesitan estar ordenadas. asiento_libre_en_tramo debe revisar todos los pasajes vigentes del viaje para comparar tramos, por eso no aplica una busqueda binaria. Sirve para validar que un viaje exista, anular un pasaje por su ID y decidir si un asiento esta libre en un tramo.
+- Superposicion de tramos (decision de diseno de asientos.py): cada pasaje es un intervalo (inicio, fin) con las posiciones de las ciudades, y dos tramos se superponen cuando inicio_a < fin_b y inicio_b < fin_a. Chillan-Talca (1, 3) y Linares-Rancagua (2, 4) se superponen y se rechazan. Concepcion-Chillan (0, 1) y Chillan-Talca (1, 3) no se superponen y el asiento se reutiliza. Como el tramo se ordena con min y max, funciona igual en ambos sentidos del viaje.
+
+### Validaciones y errores
+Igual que en la Parte A, las funciones no imprimen: lanzan ValueError cuando un dato no es valido y el menu muestra el mensaje con try/except. La conversion de numeros (int) se controla aparte.
+
+### Como probar (desde el menu)
+1. Programar un viaje Concepcion-Santiago con un bus disponible: se registra.
+2. Programar un viaje con un bus inexistente o no disponible: se rechaza.
+3. Programar un viaje Concepcion-Talca: se rechaza.
+4. Programar dos viajes con el mismo bus, fecha y hora: el segundo se rechaza.
+5. Vender Concepcion-Santiago, Chillan-Santiago y Santiago-Rancagua en un viaje con base $10.000: el valor queda en $10.000, $9.000 y $6.000.
+6. Vender con origen igual al destino: se rechaza.
+7. Vender un asiento sobre la capacidad del bus: se rechaza.
+8. Vender un tramo contrario al sentido del viaje: se rechaza.
+9. Vender el asiento 12 de Concepcion-Chillan, luego Chillan-Talca y luego Talca-Santiago: se permite.
+10. Vender el asiento 12 de Chillan-Talca y luego Linares-Rancagua: el segundo se rechaza.
+11. Anular un pasaje vigente: queda anulado y su asiento solo se libera en ese tramo.
+12. Anular el mismo pasaje otra vez: se rechaza.
+13. Consultar la recaudacion del viaje despues de anular: no incluye el pasaje anulado.
+14. Reiniciar la aplicacion: los viajes, los pasajes y sus estados se conservan.
